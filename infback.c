@@ -1,5 +1,5 @@
 /* infback.c -- inflate using a call-back interface
- * Copyright (C) 1995-2011 Mark Adler
+ * Copyright (C) 1995-2022 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -15,23 +15,6 @@
 #include "inflate.h"
 #include "inffast.h"
 
-/*
-#ifdef WIN32
-#define Z_FALSE     (__LINE__ == -1)
-#else
-#define Z_FALSE     0
-#endif
-*/
-
-#ifdef WIN32
-#  define Z_ONCE __pragma( warning(push) ) \
-    __pragma(warning(disable:4127)) \
-while (0) \
-    __pragma(warning(pop))
-#else
-#  define Z_ONCE while( 0 )
-#endif
-
 /* function prototypes */
 local void fixedtables OF((struct inflate_state FAR *state));
 
@@ -42,16 +25,12 @@ local void fixedtables OF((struct inflate_state FAR *state));
    windowBits is in the range 8..15, and window is a user-supplied
    window and output buffer that is 2**windowBits bytes.
  */
-#ifdef WIN32
-int ZEXPORT inflateBackInit_(z_streamp strm, int windowBits, unsigned char FAR *window, const char *version, int stream_size)
-#else
 int ZEXPORT inflateBackInit_(strm, windowBits, window, version, stream_size)
 z_streamp strm;
 int windowBits;
 unsigned char FAR *window;
 const char *version;
 int stream_size;
-#endif
 {
     struct inflate_state FAR *state;
 
@@ -82,7 +61,7 @@ int stream_size;
     Tracev((stderr, "inflate: allocated\n"));
     strm->state = (struct internal_state FAR *)state;
     state->dmax = 32768U;
-    state->wbits = windowBits;
+    state->wbits = (uInt)windowBits;
     state->wsize = 1U << windowBits;
     state->window = window;
     state->wnext = 0;
@@ -100,12 +79,8 @@ int stream_size;
    used for threaded applications, since the rewriting of the tables and virgin
    may not be thread-safe.
  */
-#ifdef WIN32
-local void fixedtables(struct inflate_state FAR *state)
-#else
 local void fixedtables(state)
 struct inflate_state FAR *state;
-#endif
 {
 #ifdef BUILDFIXED
     static int virgin = 1;
@@ -158,7 +133,7 @@ struct inflate_state FAR *state;
         have = strm->avail_in; \
         hold = state->hold; \
         bits = state->bits; \
-    } Z_ONCE
+    } while (0)
 
 /* Set state from registers for inflate_fast() */
 #define RESTORE() \
@@ -169,14 +144,14 @@ struct inflate_state FAR *state;
         strm->avail_in = have; \
         state->hold = hold; \
         state->bits = bits; \
-    } Z_ONCE
+    } while (0)
 
 /* Clear the input bit accumulator */
 #define INITBITS() \
     do { \
         hold = 0; \
         bits = 0; \
-    } Z_ONCE
+    } while (0)
 
 /* Assure that some input is available.  If input is requested, but denied,
    then return a Z_BUF_ERROR from inflateBack(). */
@@ -190,7 +165,7 @@ struct inflate_state FAR *state;
                 goto inf_leave; \
             } \
         } \
-    } Z_ONCE
+    } while (0)
 
 /* Get a byte of input into the bit accumulator, or return from inflateBack()
    with an error if there is no input available. */
@@ -200,7 +175,7 @@ struct inflate_state FAR *state;
         have--; \
         hold += (unsigned long)(*next++) << bits; \
         bits += 8; \
-    } Z_ONCE
+    } while (0)
 
 /* Assure that there are at least n bits in the bit accumulator.  If there is
    not enough available input to do that, then return from inflateBack() with
@@ -209,7 +184,7 @@ struct inflate_state FAR *state;
     do { \
         while (bits < (unsigned)(n)) \
             PULLBYTE(); \
-    } Z_ONCE
+    } while (0)
 
 /* Return the low n bits of the bit accumulator (n < 16) */
 #define BITS(n) \
@@ -220,14 +195,14 @@ struct inflate_state FAR *state;
     do { \
         hold >>= (n); \
         bits -= (unsigned)(n); \
-    } Z_ONCE
+    } while (0)
 
 /* Remove zero to seven bits as needed to go to a byte boundary */
 #define BYTEBITS() \
     do { \
         hold >>= bits & 7; \
         bits -= bits & 7; \
-    } Z_ONCE
+    } while (0)
 
 /* Assure that some output space is available, by writing out the window
    if it's full.  If the write fails, return from inflateBack() with a
@@ -243,7 +218,7 @@ struct inflate_state FAR *state;
                 goto inf_leave; \
             } \
         } \
-    } Z_ONCE
+    } while (0)
 
 /*
    strm provides the memory allocation functions and window buffer on input,
@@ -272,19 +247,15 @@ struct inflate_state FAR *state;
    inflateBack() can also return Z_STREAM_ERROR if the input parameters
    are not correct, i.e. strm is Z_NULL or the state was not initialized.
  */
-#ifdef WIN32
-int ZEXPORT inflateBack(z_streamp strm, in_func in, void FAR *in_desc, out_func out, void FAR *out_desc)
-#else
 int ZEXPORT inflateBack(strm, in, in_desc, out, out_desc)
 z_streamp strm;
 in_func in;
 void FAR *in_desc;
 out_func out;
 void FAR *out_desc;
-#endif
 {
     struct inflate_state FAR *state;
-    unsigned char FAR *next;    /* next input */
+    z_const unsigned char FAR *next;    /* next input */
     unsigned char FAR *put;     /* next output */
     unsigned have, left;        /* available input and output */
     unsigned long hold;         /* bit buffer */
@@ -506,6 +477,7 @@ void FAR *out_desc;
             }
             Tracev((stderr, "inflate:       codes ok\n"));
             state->mode = LEN;
+                /* fallthrough */
 
         case LEN:
             /* use inflate_fast() if we have enough input and output */
@@ -657,12 +629,8 @@ void FAR *out_desc;
     return ret;
 }
 
-#ifdef WIN32
-int ZEXPORT inflateBackEnd(z_streamp strm)
-#else
 int ZEXPORT inflateBackEnd(strm)
 z_streamp strm;
-#endif
 {
     if (strm == Z_NULL || strm->state == Z_NULL || strm->zfree == (free_func)0)
         return Z_STREAM_ERROR;
