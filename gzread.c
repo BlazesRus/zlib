@@ -28,7 +28,7 @@ local int gz_load(gz_statep state, unsigned char* buf, unsigned len, unsigned* h
         get = len - *have;
         if (get > max)
             get = max;
-        ret = read(state->fd, buf + *have, get);
+        ret = _read(state->fd, buf + *have, get);
         if (ret <= 0)
             break;
         *have += (unsigned)ret;
@@ -622,7 +622,7 @@ int ZEXPORT gzclose_r(file)
     err = state->err == Z_BUF_ERROR ? Z_BUF_ERROR : Z_OK;
     gz_error(state, Z_OK, NULL);
     free(state->path);
-    ret = close(state->fd);
+    ret = _close(state->fd);
     free(state);
     return ret ? Z_ERRNO : err;
 }
