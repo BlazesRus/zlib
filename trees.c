@@ -908,15 +908,14 @@ void ZLIB_INTERNAL _tr_align(s)
 /* ===========================================================================
  * Determine the best encoding for the current block: dynamic trees, static
  * trees or store, and write out the encoded block.
+ * buf = input block, or NULL if too old
+ * stored_len = length of input block
+ * last = index of last bit length code of non zero freq
  */
-void ZLIB_INTERNAL _tr_flush_block(s, buf, stored_len, last)
-    deflate_state *s;
-    charf *buf;       /* input block, or NULL if too old */
-    ulg stored_len;   /* length of input block */
-    int last;         /* one if this is the last block for a file */
+void ZLIB_INTERNAL _tr_flush_block(deflate_state* s, charf* buf, ulg stored_len, int last)
 {
     ulg opt_lenb, static_lenb; /* opt_len and static_len in bytes */
-    int max_blindex = 0;  /* index of last bit length code of non zero freq */
+    int max_blindex = 0;  /*  */
 
     /* Build the Huffman trees unless a stored block is forced */
     if (s->level > 0) {
@@ -1011,11 +1010,10 @@ void ZLIB_INTERNAL _tr_flush_block(s, buf, stored_len, last)
 /* ===========================================================================
  * Save the match info and tally the frequency counts. Return true if
  * the current block must be flushed.
+ * dist = distance of matched string
+ * lc = match length-MIN_MATCH or unmatched char (if dist==0) 
  */
-int ZLIB_INTERNAL _tr_tally (s, dist, lc)
-    deflate_state *s;
-    unsigned dist;  /* distance of matched string */
-    unsigned lc;    /* match length-MIN_MATCH or unmatched char (if dist==0) */
+int ZLIB_INTERNAL _tr_tally (deflate_state* s, unsigned dist, unsigned lc)
 {
     s->sym_buf[s->sym_next++] = (uch)dist;
     s->sym_buf[s->sym_next++] = (uch)(dist >> 8);
@@ -1039,11 +1037,9 @@ int ZLIB_INTERNAL _tr_tally (s, dist, lc)
 
 /* ===========================================================================
  * Send the block data compressed using the given Huffman trees
+ * Parameter ltree is the literal tree; Parameter dtree is the distance tree
  */
-local void compress_block(s, ltree, dtree)
-    deflate_state *s;
-    const ct_data *ltree; /* literal tree */
-    const ct_data *dtree; /* distance tree */
+local void compress_block(deflate_state* s, const ct_data* ltree, const ct_data* dtree)
 {
     unsigned dist;      /* distance of matched string */
     int lc;             /* match length or unmatched char (if dist == 0) */
@@ -1100,8 +1096,7 @@ local void compress_block(s, ltree, dtree)
  *   (7 {BEL}, 8 {BS}, 11 {VT}, 12 {FF}, 26 {SUB}, 27 {ESC}).
  * IN assertion: the fields Freq of dyn_ltree are set.
  */
-local int detect_data_type(s)
-    deflate_state *s;
+local int detect_data_type(deflate_state* s)
 {
     /* block_mask is the bit mask of block-listed bytes
      * set bits 0..6, 14..25, and 28..31
@@ -1133,10 +1128,9 @@ local int detect_data_type(s)
  * Reverse the first len bits of a code, using straightforward code (a faster
  * method would use a table)
  * IN assertion: 1 <= len <= 15
+ * Parameter code = the value to invert; Parameter len is it's bit length
  */
-local unsigned bi_reverse(code, len)
-    unsigned code; /* the value to invert */
-    int len;       /* its bit length */
+local unsigned bi_reverse(unsigned code, int len)
 {
     register unsigned res = 0;
     do {
@@ -1149,8 +1143,7 @@ local unsigned bi_reverse(code, len)
 /* ===========================================================================
  * Flush the bit buffer, keeping at most 7 bits in it.
  */
-local void bi_flush(s)
-    deflate_state *s;
+local void bi_flush(deflate_state* s)
 {
     if (s->bi_valid == 16) {
         put_short(s, s->bi_buf);
@@ -1166,8 +1159,7 @@ local void bi_flush(s)
 /* ===========================================================================
  * Flush the bit buffer and align the output on a byte boundary
  */
-local void bi_windup(s)
-    deflate_state *s;
+local void bi_windup(deflate_state* s)
 {
     if (s->bi_valid > 8) {
         put_short(s, s->bi_buf);

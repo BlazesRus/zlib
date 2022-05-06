@@ -60,10 +60,7 @@ local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
 #endif
 
 /* ========================================================================= */
-uLong ZEXPORT adler32_z(adler, buf, len)
-    uLong adler;
-    const Bytef *buf;
-    z_size_t len;
+uLong ZEXPORT adler32_z(uLong adler, const Bytef *buf, z_size_t len)
 {
     unsigned long sum2;
     unsigned n;

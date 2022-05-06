@@ -578,10 +578,7 @@ void ZEXPORT gzclearerr(file)
    memory).  Simply save the error message as a static string.  If there is an
    allocation failure constructing the error message, then convert the error to
    out of memory. */
-void ZLIB_INTERNAL gz_error(state, err, msg)
-    gz_statep state;
-    int err;
-    const char *msg;
+void ZLIB_INTERNAL gz_error(gz_statep state, int err, const char* msg)
 {
     /* free previously allocated message and clear */
     if (state->msg != NULL) {
