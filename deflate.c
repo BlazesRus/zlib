@@ -400,10 +400,7 @@ local int deflateStateCheck (strm)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
-    z_streamp strm;
-    const Bytef *dictionary;
-    uInt  dictLength;
+int ZEXPORT deflateSetDictionary (z_streamp strm, const Bytef* dictionary, uInt  dictLength)
 {
     deflate_state *s;
     uInt str, n;
@@ -469,10 +466,7 @@ int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateGetDictionary (strm, dictionary, dictLength)
-    z_streamp strm;
-    Bytef *dictionary;
-    uInt  *dictLength;
+int ZEXPORT deflateGetDictionary (z_streamp strm, Bytef* dictionary, uInt* dictLength)
 {
     deflate_state *s;
     uInt len;
@@ -529,8 +523,7 @@ int ZEXPORT deflateResetKeep (strm)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateReset (strm)
-    z_streamp strm;
+int ZEXPORT deflateReset (z_streamp strm)
 {
     int ret;
 

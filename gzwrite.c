@@ -148,9 +148,7 @@ local int gz_comp(gz_statep state, int flush)
 
 /* Compress len zeros to output.  Return -1 on a write error or memory
    allocation failure by gz_comp(), or 0 on success. */
-local int gz_zero(state, len)
-    gz_statep state;
-    z_off64_t len;
+local int gz_zero(gz_statep state, z_off64_t len)
 {
     int first;
     unsigned n;
