@@ -179,10 +179,7 @@ local int gz_zero(gz_statep state, z_off64_t len)
 
 /* Write len bytes from buf to file.  Return the number of bytes written.  If
    the returned value is less than len, then there was an error. */
-local z_size_t gz_write(state, buf, len)
-    gz_statep state;
-    voidpc buf;
-    z_size_t len;
+local z_size_t gz_write(gz_statep state, voidpc buf, z_size_t len)
 {
     z_size_t put = len;
 
