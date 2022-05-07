@@ -441,8 +441,8 @@ int ZEXPORT gzgetc(gzFile file)
 
     /* try output buffer (no need to check for skip request) */
     if (state->x.have) {
-        state->x.have--;
-        state->x.pos++;
+        --state->x.have;
+        ++state->x.pos;
         return *(state->x.next)++;
     }
 

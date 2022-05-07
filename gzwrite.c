@@ -344,8 +344,8 @@ int ZEXPORT gzputc(file, c)
         have = (unsigned)((strm->next_in + strm->avail_in) - state->in);
         if (have < state->size) {
             state->in[have] = (unsigned char)c;
-            strm->avail_in++;
-            state->x.pos++;
+            ++strm->avail_in;
+            ++state->x.pos;
             return c & 0xff;
         }
     }

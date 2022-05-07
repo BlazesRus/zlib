@@ -1410,12 +1410,12 @@ unsigned len;
     next = 0;
     while (next < len && got < 4) {
         if ((int)(buf[next]) == (got < 2 ? 0 : 0xff))
-            got++;
+            ++got;
         else if (buf[next])
             got = 0;
         else
             got = 4 - got;
-        next++;
+        ++next;
     }
     *have = got;
     return next;

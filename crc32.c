@@ -574,7 +574,7 @@ local z_crc_t x2nmodp(n, k)
         if (n & 1)
             p = multmodp(x2n_table[k & 31], p);
         n >>= 1;
-        k++;
+        ++k;
     }
     return p;
 }
@@ -634,7 +634,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
 
     /* Compute the CRC up to a word boundary. */
     while (len && ((z_size_t)buf & 7) != 0) {
-        len--;
+        --len;
         val = *buf++;
         __asm__ volatile("crc32b %w0, %w0, %w1" : "+r"(crc) : "r"(val));
     }
@@ -645,12 +645,12 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
     len &= 7;
 
     /* Do three interleaved CRCs to realize the throughput of one crc32x
-       instruction per cycle. Each CRC is calcuated on Z_BATCH words. The three
+       instruction per cycle. Each CRC is calculated on Z_BATCH words. The three
        CRCs are combined into a single CRC after each set of batches. */
     while (num >= 3 * Z_BATCH) {
         crc1 = 0;
         crc2 = 0;
-        for (i = 0; i < Z_BATCH; i++) {
+        for (i = 0; i < Z_BATCH; ++i) {
             val0 = word[i];
             val1 = word[i + Z_BATCH];
             val2 = word[i + 2 * Z_BATCH];
@@ -671,7 +671,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
         last2 = last << 1;
         crc1 = 0;
         crc2 = 0;
-        for (i = 0; i < last; i++) {
+        for (i = 0; i < last; ++i) {
             val0 = word[i];
             val1 = word[i + last];
             val2 = word[i + last2];
@@ -687,7 +687,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
     }
 
     /* Compute the CRC on any remaining words. */
-    for (i = 0; i < num; i++) {
+    for (i = 0; i < num; ++i) {
         val0 = word[i];
         __asm__ volatile("crc32x %w0, %w0, %x1" : "+r"(crc) : "r"(val0));
     }
@@ -696,7 +696,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
     /* Complete the CRC on any remaining bytes. */
     buf = (const unsigned char FAR *)word;
     while (len) {
-        len--;
+        --len;
         val = *buf++;
         __asm__ volatile("crc32b %w0, %w0, %w1" : "+r"(crc) : "r"(val));
     }
@@ -718,7 +718,7 @@ local z_crc_t crc_word(data)
     z_word_t data;
 {
     int k;
-    for (k = 0; k < W; k++)
+    for (k = 0; k < W; ++k)
         data = (data >> 8) ^ crc_table[data & 0xff];
     return (z_crc_t)data;
 }
@@ -727,7 +727,7 @@ local z_word_t crc_word_big(data)
     z_word_t data;
 {
     int k;
-    for (k = 0; k < W; k++)
+    for (k = 0; k < W; ++k)
         data = (data << 8) ^
             crc_big_table[(data >> ((W - 1) << 3)) & 0xff];
     return data;
@@ -762,7 +762,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
 
         /* Compute the CRC up to a z_word_t boundary. */
         while (len && ((z_size_t)buf & (W - 1)) != 0) {
-            len--;
+            --len;
             crc = (crc >> 8) ^ crc_table[(crc ^ *buf++) & 0xff];
         }
 
@@ -984,7 +984,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
 #endif
 #endif
 #endif
-                for (k = 1; k < W; k++) {
+                for (k = 1; k < W; ++k) {
                     crc0 ^= crc_braid_big_table[k][(word0 >> (k << 3)) & 0xff];
 #if N > 1
                     crc1 ^= crc_braid_big_table[k][(word1 >> (k << 3)) & 0xff];

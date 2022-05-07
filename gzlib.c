@@ -171,7 +171,7 @@ local gzFile gz_open(path, fd, mode)
             default:        /* could consider as an error, but just ignore */
                 ;
             }
-        mode++;
+        ++mode;
     }
 
     /* must provide an "r", "w", or "a" */
@@ -629,7 +629,7 @@ unsigned ZLIB_INTERNAL gz_intmax()
     do {
         q = p;
         p <<= 1;
-        p++;
+        ++p;
     } while (p > q);
     return q >> 1;
 }

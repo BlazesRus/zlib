@@ -531,10 +531,10 @@ local void gen_bitlen(s, desc)
     /* Find the first bit length which could increase: */
     do {
         bits = max_length-1;
-        while (s->bl_count[bits] == 0) bits--;
-        s->bl_count[bits]--;      /* move one leaf down the tree */
+        while (s->bl_count[bits] == 0) --bits;
+        --s->bl_count[bits];      /* move one leaf down the tree */
         s->bl_count[bits+1] += 2; /* move one overflow item as its brother */
-        s->bl_count[max_length]--;
+        --s->bl_count[max_length];
         /* The brother of the overflow item also moves one step up,
          * but this does not affect bl_count[max_length]
          */
@@ -546,7 +546,7 @@ local void gen_bitlen(s, desc)
      * lengths instead of fixing only the wrong ones. This idea is taken
      * from 'ar' written by Haruhiko Okumura.)
      */
-    for (bits = max_length; bits != 0; bits--) {
+    for (bits = max_length; bits != 0; --bits) {
         n = s->bl_count[bits];
         while (n != 0) {
             m = s->heap[--h];
@@ -556,7 +556,7 @@ local void gen_bitlen(s, desc)
                 s->opt_len += ((ulg)bits - tree[m].Len) * tree[m].Freq;
                 tree[m].Len = (ush)bits;
             }
-            n--;
+            --n;
         }
     }
 }
@@ -582,7 +582,7 @@ local void gen_codes (tree, max_code, bl_count)
     /* The distribution counts are first used to generate the code values
      * without bit reversal.
      */
-    for (bits = 1; bits <= MAX_BITS; bits++) {
+    for (bits = 1; bits <= MAX_BITS; ++bits) {
         code = (code + bl_count[bits-1]) << 1;
         next_code[bits] = (ush)code;
     }
@@ -593,7 +593,7 @@ local void gen_codes (tree, max_code, bl_count)
             "inconsistent bit counts");
     Tracev((stderr,"\ngen_codes: max_code %d ", max_code));
 
-    for (n = 0;  n <= max_code; n++) {
+    for (n = 0;  n <= max_code; ++n) {
         int len = tree[n].Len;
         if (len == 0) continue;
         /* Now reverse the bits */
@@ -629,7 +629,7 @@ local void build_tree(s, desc)
      */
     s->heap_len = 0, s->heap_max = HEAP_SIZE;
 
-    for (n = 0; n < elems; n++) {
+    for (n = 0; n < elems; ++n) {
         if (tree[n].Freq != 0) {
             s->heap[++(s->heap_len)] = max_code = n;
             s->depth[n] = 0;
@@ -647,7 +647,7 @@ local void build_tree(s, desc)
         node = s->heap[++(s->heap_len)] = (max_code < 2 ? ++max_code : 0);
         tree[node].Freq = 1;
         s->depth[node] = 0;
-        s->opt_len--; if (stree) s->static_len -= stree[node].Len;
+        --s->opt_len; if (stree) s->static_len -= stree[node].Len;
         /* node is 0 or 1 so it does not have extra bits */
     }
     desc->max_code = max_code;
@@ -716,19 +716,19 @@ local void scan_tree (s, tree, max_code)
     if (nextlen == 0) max_count = 138, min_count = 3;
     tree[max_code+1].Len = (ush)0xffff; /* guard */
 
-    for (n = 0; n <= max_code; n++) {
+    for (n = 0; n <= max_code; ++n) {
         curlen = nextlen; nextlen = tree[n+1].Len;
         if (++count < max_count && curlen == nextlen) {
             continue;
         } else if (count < min_count) {
             s->bl_tree[curlen].Freq += count;
         } else if (curlen != 0) {
-            if (curlen != prevlen) s->bl_tree[curlen].Freq++;
-            s->bl_tree[REP_3_6].Freq++;
+            if (curlen != prevlen) ++s->bl_tree[curlen].Freq;
+            ++s->bl_tree[REP_3_6].Freq;
         } else if (count <= 10) {
-            s->bl_tree[REPZ_3_10].Freq++;
+            ++s->bl_tree[REPZ_3_10].Freq;
         } else {
-            s->bl_tree[REPZ_11_138].Freq++;
+            ++s->bl_tree[REPZ_11_138].Freq;
         }
         count = 0; prevlen = curlen;
         if (nextlen == 0) {
@@ -761,7 +761,7 @@ local void send_tree (s, tree, max_code)
     /* tree[max_code+1].Len = -1; */  /* guard already set */
     if (nextlen == 0) max_count = 138, min_count = 3;
 
-    for (n = 0; n <= max_code; n++) {
+    for (n = 0; n <= max_code; ++n) {
         curlen = nextlen; nextlen = tree[n+1].Len;
         if (++count < max_count && curlen == nextlen) {
             continue;
@@ -770,7 +770,7 @@ local void send_tree (s, tree, max_code)
 
         } else if (curlen != 0) {
             if (curlen != prevlen) {
-                send_code(s, curlen, s->bl_tree); count--;
+                send_code(s, curlen, s->bl_tree); --count;
             }
             Assert(count >= 3 && count <= 6, " 3_6?");
             send_code(s, REP_3_6, s->bl_tree); send_bits(s, count-3, 2);
@@ -815,7 +815,7 @@ local int build_bl_tree(s)
      * requires that at least 4 bit length codes be sent. (appnote.txt says
      * 3 but the actual value used is 4.)
      */
-    for (max_blindex = BL_CODES-1; max_blindex >= 3; max_blindex--) {
+    for (max_blindex = BL_CODES-1; max_blindex >= 3; --max_blindex) {
         if (s->bl_tree[bl_order[max_blindex]].Len != 0) break;
     }
     /* Update opt_len to include the bit length tree and counts */
@@ -844,7 +844,7 @@ local void send_all_trees(s, lcodes, dcodes, blcodes)
     send_bits(s, lcodes-257, 5); /* not +255 as stated in appnote.txt */
     send_bits(s, dcodes-1,   5);
     send_bits(s, blcodes-4,  4); /* not -3 as stated in appnote.txt */
-    for (rank = 0; rank < blcodes; rank++) {
+    for (rank = 0; rank < blcodes; ++rank) {
         Tracev((stderr, "\nbl code %2d ", bl_order[rank]));
         send_bits(s, s->bl_tree[bl_order[rank]].Len, 3);
     }
@@ -1020,7 +1020,7 @@ int ZLIB_INTERNAL _tr_tally (deflate_state* s, unsigned dist, unsigned lc)
     s->sym_buf[s->sym_next++] = (uch)lc;
     if (dist == 0) {
         /* lc is the unmatched char */
-        s->dyn_ltree[lc].Freq++;
+        ++s->dyn_ltree[lc].Freq;
     } else {
         s->matches++;
         /* Here, lc is the match length - MIN_MATCH */
@@ -1029,8 +1029,8 @@ int ZLIB_INTERNAL _tr_tally (deflate_state* s, unsigned dist, unsigned lc)
                (ush)lc <= (ush)(MAX_MATCH-MIN_MATCH) &&
                (ush)d_code(dist) < (ush)D_CODES,  "_tr_tally: bad match");
 
-        s->dyn_ltree[_length_code[lc]+LITERALS+1].Freq++;
-        s->dyn_dtree[d_code(dist)].Freq++;
+        ++s->dyn_ltree[_length_code[lc]+LITERALS+1].Freq;
+        ++s->dyn_dtree[d_code(dist)].Freq;
     }
     return (s->sym_next == s->sym_end);
 }
@@ -1106,7 +1106,7 @@ local int detect_data_type(deflate_state* s)
     int n;
 
     /* Check for non-textual ("block-listed") bytes. */
-    for (n = 0; n <= 31; n++, block_mask >>= 1)
+    for (n = 0; n <= 31; ++n, block_mask >>= 1)
         if ((block_mask & 1) && (s->dyn_ltree[n].Freq != 0))
             return Z_BINARY;
 
@@ -1114,7 +1114,7 @@ local int detect_data_type(deflate_state* s)
     if (s->dyn_ltree[9].Freq != 0 || s->dyn_ltree[10].Freq != 0
             || s->dyn_ltree[13].Freq != 0)
         return Z_TEXT;
-    for (n = 32; n < LITERALS; n++)
+    for (n = 32; n < LITERALS; ++n)
         if (s->dyn_ltree[n].Freq != 0)
             return Z_TEXT;
 

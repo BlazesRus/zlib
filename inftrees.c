@@ -104,14 +104,14 @@ unsigned short FAR *work;
      */
 
     /* accumulate lengths for codes (assumes lens[] all in 0..MAXBITS) */
-    for (len = 0; len <= MAXBITS; len++)
+    for (len = 0; len <= MAXBITS; ++len)
         count[len] = 0;
-    for (sym = 0; sym < codes; sym++)
-        count[lens[sym]]++;
+    for (sym = 0; sym < codes; ++sym)
+        ++count[lens[sym]];
 
     /* bound code lengths, force root to be within code lengths */
     root = *bits;
-    for (max = MAXBITS; max >= 1; max--)
+    for (max = MAXBITS; max >= 1; --max)
         if (count[max] != 0) break;
     if (root > max) root = max;
     if (max == 0) {                     /* no symbols to code at all */
@@ -123,13 +123,13 @@ unsigned short FAR *work;
         *bits = 1;
         return 0;     /* no symbols, but wait for decoding to report error */
     }
-    for (min = 1; min < max; min++)
+    for (min = 1; min < max; ++min)
         if (count[min] != 0) break;
     if (root < min) root = min;
 
     /* check for an over-subscribed or incomplete set of lengths */
     left = 1;
-    for (len = 1; len <= MAXBITS; len++) {
+    for (len = 1; len <= MAXBITS; ++len) {
         left <<= 1;
         left -= count[len];
         if (left < 0) return -1;        /* over-subscribed */
@@ -139,11 +139,11 @@ unsigned short FAR *work;
 
     /* generate offsets into symbol table for each length for sorting */
     offs[1] = 0;
-    for (len = 1; len < MAXBITS; len++)
+    for (len = 1; len < MAXBITS; ++len)
         offs[len + 1] = offs[len] + count[len];
 
     /* sort symbols by length, by symbol order within each length */
-    for (sym = 0; sym < codes; sym++)
+    for (sym = 0; sym < codes; ++sym)
         if (lens[sym] != 0) work[offs[lens[sym]]++] = (unsigned short)sym;
 
     /*
@@ -248,7 +248,7 @@ unsigned short FAR *work;
             huff = 0;
 
         /* go to next symbol, update count, len */
-        sym++;
+        ++sym;
         if (--(count[len]) == 0) {
             if (len == max) break;
             len = lens[work[sym]];
@@ -269,7 +269,7 @@ unsigned short FAR *work;
             while (curr + drop < max) {
                 left -= count[curr + drop];
                 if (left <= 0) break;
-                curr++;
+                ++curr;
                 left <<= 1;
             }
 

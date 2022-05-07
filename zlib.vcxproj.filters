@@ -27,117 +27,88 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MFCApp.h">
-      <Filter>ProcessingThread</Filter>
-    </ClInclude>
-    <ClCompile Include="MFCApp.cpp">
-      <Filter>ProcessingThread</Filter>
-    </ClCompile>
-    <ClInclude Include="AppProcessing.h">
-      <Filter>ProcessingThread</Filter>
-    </ClInclude>
-    <ClCompile Include="AppProcessing.cpp">
-      <Filter>ProcessingThread</Filter>
-    </ClCompile>
-    <ClInclude Include="MFCAppWithoutTemplate.h">
-      <Filter>ProcessingThread</Filter>
-    </ClInclude>
-    <ClCompile Include="MFCAppWithoutTemplate.cpp">
-      <Filter>ProcessingThread</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MFCFramework.h">
+    <ClInclude Include="crc32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="deflate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MFCFrame.h">
+    <ClInclude Include="gzguts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MFCDoc.h">
+    <ClInclude Include="inffast.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MFCView.h">
+    <ClInclude Include="inffixed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MFCRes.h">
+    <ClInclude Include="inflate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MFCpch.h">
+    <ClInclude Include="inftrees.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OutputWnd.h">
+    <ClInclude Include="trees.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="zconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="zutil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MFCFrame.cpp">
+    <ClCompile Include="adler32.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MFCDoc.cpp">
+    <ClCompile Include="compress.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MFCView.cpp">
+    <ClCompile Include="crc32.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MFCpch.cpp">
+    <ClCompile Include="deflate.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OutputWnd.cpp">
+    <ClCompile Include="gzclose.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gzlib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gzread.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gzwrite.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="infback.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="inffast.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="inflate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="inftrees.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="trees.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="uncompr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="zutil.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(BlazesSharedCode)\tsl\ordered_set.h">
-      <Filter>TSL</Filter>
-    </ClInclude>
-    <ClInclude Include="$(BlazesSharedCode)\tsl\ordered_map.h">
-      <Filter>TSL</Filter>
-    </ClInclude>
-    <ClInclude Include="$(BlazesSharedCode)\tsl\ordered_hash.h">
-      <Filter>TSL</Filter>
-    </ClInclude>
-    <ClCompile Include="$(BlazesSharedCode)\OtherFunctions\StringFunctions.cpp">
-      <Filter>BlazesRusSharedCode</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BlazesSharedCode)\VariableLists\StringVectorList.cpp">
-      <Filter>BlazesRusSharedCode</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BlazesSharedCode)\OtherFunctions\VariableConversionFunctions.cpp">
-      <Filter>BlazesRusSharedCode</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BlazesSharedCode)\VariableLists\VariableTypeLists.cpp">
-      <Filter>BlazesRusSharedCode</Filter>
-    </ClCompile>
-    <ClCompile Include="$(BlazesSharedCode)\VariableLists\VariableVectorFunctions.cpp">
-      <Filter>BlazesRusSharedCode</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="MFCApp.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\MFCApp.rc2">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\MFCDoc.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\App.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Toolbar.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\output_wnd.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\output_wnd.ico">
       <Filter>Resource Files</Filter>
     </Image>
