@@ -486,7 +486,7 @@ int ZEXPORT gzungetc(int c, gzFile file)
         state->x.have = 1;
         state->x.next = state->out + (state->size << 1) - 1;
         state->x.next[0] = (unsigned char)c;
-        state->x.pos--;
+        --state->x.pos;
         state->past = 0;
         return c;
     }
@@ -505,19 +505,16 @@ int ZEXPORT gzungetc(int c, gzFile file)
             *--dest = *--src;
         state->x.next = dest;
     }
-    state->x.have++;
-    state->x.next--;
+    ++state->x.have;
+    --state->x.next;
     state->x.next[0] = (unsigned char)c;
-    state->x.pos--;
+    --state->x.pos;
     state->past = 0;
     return c;
 }
 
 /* -- see zlib.h -- */
-char * ZEXPORT gzgets(file, buf, len)
-    gzFile file;
-    char *buf;
-    int len;
+char * ZEXPORT gzgets(gzFile file, char* buf, int len)
 {
     unsigned left, n;
     char *str;
@@ -578,8 +575,7 @@ char * ZEXPORT gzgets(file, buf, len)
 }
 
 /* -- see zlib.h -- */
-int ZEXPORT gzdirect(file)
-    gzFile file;
+int ZEXPORT gzdirect(gzFile file)
 {
     gz_statep state;
 

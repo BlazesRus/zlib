@@ -14,8 +14,7 @@ local z_size_t gz_write OF((gz_statep, voidpc, z_size_t));
 /* Initialize state for writing a gzip file.  Mark initialization by setting
    state->size to non-zero.  Return -1 on a memory allocation failure, or 0 on
    success. */
-local int gz_init(state)
-    gz_statep state;
+local int gz_init(gz_statep state)
 {
     int ret;
     z_streamp strm = &(state->strm);
@@ -70,9 +69,7 @@ local int gz_init(state)
    deflate() flush value.  If flush is Z_FINISH, then the deflate() state is
    reset to start a new gzip stream.  If gz->direct is true, then simply write
    to the output file without compressing, and ignore flush. */
-local int gz_comp(state, flush)
-    gz_statep state;
-    int flush;
+local int gz_comp(gz_statep state, int flush)
 {
     int ret, writ;
     unsigned have, put, max = ((unsigned)-1 >> 2) + 1;

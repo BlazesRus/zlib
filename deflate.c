@@ -201,8 +201,7 @@ local const config configuration_table[10] = {
  * bit values at the expense of memory usage). We slide even when level == 0 to
  * keep the hash table consistent if we switch back to level > 0 later.
  */
-local void slide_hash(s)
-    deflate_state *s;
+local void slide_hash(deflate_state* s)
 {
     unsigned n, m;
     Posf *p;
@@ -228,11 +227,7 @@ local void slide_hash(s)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateInit_(strm, level, version, stream_size)
-    z_streamp strm;
-    int level;
-    const char *version;
-    int stream_size;
+int ZEXPORT deflateInit_(z_streamp strm, int level, const char* version, int stream_size)
 {
     return deflateInit2_(strm, level, Z_DEFLATED, MAX_WBITS, DEF_MEM_LEVEL,
                          Z_DEFAULT_STRATEGY, version, stream_size);
@@ -240,16 +235,8 @@ int ZEXPORT deflateInit_(strm, level, version, stream_size)
 }
 
 /* ========================================================================= */
-int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
-                  version, stream_size)
-    z_streamp strm;
-    int  level;
-    int  method;
-    int  windowBits;
-    int  memLevel;
-    int  strategy;
-    const char *version;
-    int stream_size;
+int ZEXPORT deflateInit2_(z_streamp strm, int level, int method, int windowBits, int memLevel, int strategy,
+    const char* version, int stream_size)
 {
     deflate_state *s;
     int wrap = 1;
@@ -1541,7 +1528,7 @@ local void fill_window(s)
                 /* Very unlikely, but possible on 16 bit machine if
                  * strstart == 0 && lookahead == 1 (input done a byte at time)
                  */
-                more--;
+                --more;
             }
         }
 
