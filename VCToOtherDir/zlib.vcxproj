@@ -123,7 +123,7 @@
     <ContribDir>$([System.IO.Path]::GetFullPath('$(RootDirectory)contrib\'))</ContribDir>
   </PropertyGroup>
   <PropertyGroup Label="OutputInfo">
-    <OutDir>$(SDLOutputDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SDLOutputDir)zlib\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SDLOutputDir)ObjectFiles\$(ProjectName)\$(Configuration)_$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup>
