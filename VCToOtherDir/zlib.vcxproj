@@ -60,6 +60,11 @@
     <ParentOfRoot>$([System.IO.Path]::GetFullPath('$(RootDirectory)\..\'))</ParentOfRoot>
     <ContribDir>$([System.IO.Path]::GetFullPath('$(RootDirectory)contrib\'))</ContribDir>
   </PropertyGroup>
+  <PropertyGroup>
+    <ZLibPngDir>$([System.IO.Path]::GetFullPath('$(ParentOfRoot)TangariaCoop\src\win\'))</ZLibPngDir>
+    <ZLibPngLibDir Condition="'$(Configuration)' != 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(ZLibPngDir)$(Platform)\'))</ZLibPngLibDir>
+    <ZLibPngLibDir Condition="'$(Configuration)' == 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(ZLibPngDir)Clang$(Platform)\'))</ZLibPngLibDir>
+  </PropertyGroup>
   <Choose>
     <When Condition="'$(Configuration)' == 'ReleaseStatic' Or '$(Configuration)' == 'DebugStatic' Or '$(Configuration)'=='DebugStaticWithoutAsm'">
       <PropertyGroup>
@@ -100,11 +105,6 @@
       </PropertyGroup>
     </Otherwise>
   </Choose>
-  <PropertyGroup>
-    <ZLibPngDir>$([System.IO.Path]::GetFullPath('$(ParentOfRoot)TangariaCoop\src\win\'))</ZLibPngDir>
-    <ZLibPngLibDir Condition="'$(Configuration)' != 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(ZLibPngDir)$(Platform)\'))</ZLibPngLibDir>
-    <ZLibPngLibDir Condition="'$(Configuration)' == 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(ZLibPngDir)Clang$(Platform)\'))</ZLibPngLibDir>
-  </PropertyGroup>
   <PropertyGroup Label="ToolsetOptions">
     <!-- 142 for VS2019(Default);143 for VS2022-->
     <PlatformToolset Condition="'$(Configuration)' == 'ReleaseC99'">ClangCL</PlatformToolset>
@@ -131,9 +131,6 @@
     <_ProjectFileVersion>10.0.30128.1</_ProjectFileVersion>
 	<GenerateManifest>false</GenerateManifest>
 	<TargetName>zlib</TargetName>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRules/>
-    <CodeAnalysisRuleAssemblies/>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <Midl>
@@ -149,7 +146,8 @@
       <AdditionalIncludeDirectories>$(RootDirectory);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 	  <AdditionalIncludeDirectories Condition="'$(Platform)'=='Win32'">$(ContribDir)masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Platform)'=='x64'">$(ContribDir)masmx64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;ASMV;ASMINF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(WithAsm)'=='true'">ASMV;ASMINF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Itanium'">WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
@@ -300,25 +298,25 @@ bld_ml64.bat</Command>
   </ItemGroup>
   <ItemGroup><!--Header excluded from Static library?-->
     <ClInclude Include="..\deflate.h">
-          <ExcludedFromBuild Condition="'$(LibraryType)'=='Static'">true</ExcludedFromBuild>
+          <ExcludedFromBuild Condition="'$(ConfigurationType)'=='StaticLibrary'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\infblock.h">
-          <ExcludedFromBuild Condition="'$(LibraryType)'=='Static'">true</ExcludedFromBuild>
+          <ExcludedFromBuild Condition="'$(ConfigurationType)'=='StaticLibrary'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\infcodes.h">
-          <ExcludedFromBuild Condition="'$(LibraryType)'=='Static'">true</ExcludedFromBuild>
+          <ExcludedFromBuild Condition="'$(ConfigurationType)'=='StaticLibrary'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\inffast.h">
-          <ExcludedFromBuild Condition="'$(LibraryType)'=='Static'">true</ExcludedFromBuild>
+          <ExcludedFromBuild Condition="'$(ConfigurationType)'=='StaticLibrary'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\inftrees.h">
-          <ExcludedFromBuild Condition="'$(LibraryType)'=='Static'">true</ExcludedFromBuild>
+          <ExcludedFromBuild Condition="'$(ConfigurationType)'=='StaticLibrary'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\infutil.h">
-          <ExcludedFromBuild Condition="'$(LibraryType)'=='Static'">true</ExcludedFromBuild>
+          <ExcludedFromBuild Condition="'$(ConfigurationType)'=='StaticLibrary'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\zconf.h">
-          <ExcludedFromBuild Condition="'$(LibraryType)'=='Static'">true</ExcludedFromBuild>
+          <ExcludedFromBuild Condition="'$(ConfigurationType)'=='StaticLibrary'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\zlib.h">
           <ExcludedFromBuild Condition="'$(LibraryType)'=='Static'">true</ExcludedFromBuild>
