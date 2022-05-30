@@ -61,7 +61,7 @@
     <ContribDir>$([System.IO.Path]::GetFullPath('$(RootDirectory)contrib\'))</ContribDir>
   </PropertyGroup>
   <Choose>
-    <When Condition="'$(Configuration)' == 'ReleaseStatic' Or '$(Configuration)' == 'DebugStatic' Or 'DebugStaticWithoutAsm'">
+    <When Condition="'$(Configuration)' == 'ReleaseStatic' Or '$(Configuration)' == 'DebugStatic' Or '$(Configuration)'=='DebugStaticWithoutAsm'">
       <PropertyGroup>
         <ConfigurationType>StaticLibrary</ConfigurationType>
       </PropertyGroup>
@@ -73,7 +73,7 @@
     </Otherwise>
   </Choose>
   <Choose>
-    <When Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugStatic' Or 'DebugWithoutAsm'">
+    <When Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugStatic' Or '$(Configuration)'=='DebugWithoutAsm'">
       <PropertyGroup>
         <ConfigurationStyle>Debug</ConfigurationStyle>
 		<LinkIncremental>true</LinkIncremental>

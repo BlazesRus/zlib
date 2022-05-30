@@ -259,3 +259,5 @@ contrib/vstudio/vc16/x64/
 *.pdb
 
 Release/zlib.tlog/
+
+*.user
