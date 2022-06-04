@@ -9,14 +9,14 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="ReleaseWithAsm|Win32">
+<!--     <ProjectConfiguration Include="ReleaseWithAsm|Win32">
       <Configuration>ReleaseWithAsm</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="ReleaseWithAsm|x64">
       <Configuration>ReleaseWithAsm</Configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
+    </ProjectConfiguration> -->
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
