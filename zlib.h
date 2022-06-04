@@ -1896,9 +1896,13 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
    ZEXTERN z_off_t ZEXPORT gzoffset OF((gzFile));
    ZEXTERN uLong ZEXPORT adler32_combine OF((uLong, uLong, z_off_t));
    ZEXTERN uLong ZEXPORT crc32_combine OF((uLong, uLong, z_off_t));
+   #if defined(WIN64)
    ZEXTERN uLong ZEXPORT crc32_combine64 OF((uLong, uLong, z_off64_t));
+   #endif
    ZEXTERN uLong ZEXPORT crc32_combine_gen OF((z_off_t));
+   #if defined(WIN64)
    ZEXTERN uLong ZEXPORT crc32_combine_gen64 OF((z_off64_t));
+   #endif
 #endif
 
 #else /* Z_SOLO */
