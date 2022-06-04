@@ -250,6 +250,42 @@ node_modules/
 
 .DS_Store
 
+# RTC ignores
+# Premake generated files #
+###########################
+*.vcxproj*
+*.sln
+Makefile
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.project
+
+# VS generated files #
+######################
+ipch/
+*.suo
+*.opensdf
+*.sdf
+*.vcxproj
+*.filters
+*.user
+
+# Qt files
+###########################
+*.config
+*.creator
+*.files
+*.includes
+moc/
+
 contrib/vstudio/vc16/*/
 **/.vs/zlib/**
 **.log
