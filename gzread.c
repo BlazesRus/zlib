@@ -441,8 +441,8 @@ int ZEXPORT gzgetc(gzFile file)
 
     /* try output buffer (no need to check for skip request) */
     if (state->x.have) {
-        --state->x.have;
-        ++state->x.pos;
+        state->x.have--;
+        state->x.pos++;
         return *(state->x.next)++;
     }
 
@@ -486,7 +486,7 @@ int ZEXPORT gzungetc(int c, gzFile file)
         state->x.have = 1;
         state->x.next = state->out + (state->size << 1) - 1;
         state->x.next[0] = (unsigned char)c;
-        --state->x.pos;
+        state->x.pos--;
         state->past = 0;
         return c;
     }
@@ -505,10 +505,10 @@ int ZEXPORT gzungetc(int c, gzFile file)
             *--dest = *--src;
         state->x.next = dest;
     }
-    ++state->x.have;
-    --state->x.next;
+    state->x.have++;
+    state->x.next--;
     state->x.next[0] = (unsigned char)c;
-    --state->x.pos;
+    state->x.pos--;
     state->past = 0;
     return c;
 }

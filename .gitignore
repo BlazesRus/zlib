@@ -250,14 +250,7 @@ node_modules/
 
 .DS_Store
 
-contrib/vstudio/vc16/x64/
-
-.vs/zlib/v16/.suo
-
+contrib/vstudio/vc16/*/
+**/.vs/zlib/**
 *.log
-
-*.pdb
-
-Release/zlib.tlog/
-
 *.user

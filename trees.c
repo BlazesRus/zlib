@@ -527,9 +527,9 @@ local void gen_bitlen(deflate_state* s, tree_desc* desc)
     do {
         bits = max_length-1;
         while (s->bl_count[bits] == 0) --bits;
-        --s->bl_count[bits];      /* move one leaf down the tree */
+        s->bl_count[bits]--;      /* move one leaf down the tree */
         s->bl_count[bits+1] += 2; /* move one overflow item as its brother */
-        --s->bl_count[max_length];
+        s->bl_count[max_length]--;
         /* The brother of the overflow item also moves one step up,
          * but this does not affect bl_count[max_length]
          */
@@ -640,7 +640,7 @@ local void build_tree(deflate_state* s, tree_desc* desc)
         node = s->heap[++(s->heap_len)] = (max_code < 2 ? ++max_code : 0);
         tree[node].Freq = 1;
         s->depth[node] = 0;
-        --s->opt_len; if (stree) s->static_len -= stree[node].Len;
+        s->opt_len--; if (stree) s->static_len -= stree[node].Len;
         /* node is 0 or 1 so it does not have extra bits */
     }
     desc->max_code = max_code;
@@ -714,12 +714,12 @@ local void scan_tree (deflate_state* s, ct_data* tree, int max_code)
         } else if (count < min_count) {
             s->bl_tree[curlen].Freq += count;
         } else if (curlen != 0) {
-            if (curlen != prevlen) ++s->bl_tree[curlen].Freq;
-            ++s->bl_tree[REP_3_6].Freq;
+            if (curlen != prevlen) s->bl_tree[curlen].Freq++;
+            s->bl_tree[REP_3_6].Freq++;
         } else if (count <= 10) {
-            ++s->bl_tree[REPZ_3_10].Freq;
+            s->bl_tree[REPZ_3_10].Freq++;
         } else {
-            ++s->bl_tree[REPZ_11_138].Freq;
+            s->bl_tree[REPZ_11_138].Freq++;
         }
         count = 0; prevlen = curlen;
         if (nextlen == 0) {
@@ -1090,7 +1090,7 @@ local int detect_data_type(deflate_state* s)
     int n;
 
     /* Check for non-textual ("block-listed") bytes. */
-    for (n = 0; n <= 31; ++n, block_mask >>= 1)
+    for (n = 0; n <= 31; n++, block_mask >>= 1)
         if ((block_mask & 1) && (s->dyn_ltree[n].Freq != 0))
             return Z_BINARY;
 

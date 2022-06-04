@@ -1572,7 +1572,7 @@ local void fill_window(s)
 #endif
                 s->head[s->ins_h] = (Pos)str;
                 ++str;
-                --s->insert;
+                s->insert--;
                 if (s->lookahead + s->insert < MIN_MATCH)
                     break;
             }
@@ -1773,7 +1773,7 @@ local block_state deflate_stored(s, flush)
                 s->strstart -= s->w_size;
                 zmemcpy(s->window, s->window + s->w_size, s->strstart);
                 if (s->matches < 2)
-                    ++s->matches;   /* add a pending slide_hash() */
+                    s->matches++;   /* add a pending slide_hash() */
                 if (s->insert > s->strstart)
                     s->insert = s->strstart;
             }
@@ -1803,7 +1803,7 @@ local block_state deflate_stored(s, flush)
         s->strstart -= s->w_size;
         zmemcpy(s->window, s->window + s->w_size, s->strstart);
         if (s->matches < 2)
-            ++s->matches;           /* add a pending slide_hash() */
+            s->matches++;           /* add a pending slide_hash() */
         have += s->w_size;          /* more space now */
         if (s->insert > s->strstart)
             s->insert = s->strstart;
@@ -1906,13 +1906,13 @@ local block_state deflate_fast(s, flush)
                 s->lookahead >= MIN_MATCH) {
                 s->match_length--; /* string at strstart already in table */
                 do {
-                    ++s->strstart;
+                    s->strstart++;
                     INSERT_STRING(s, s->strstart, hash_head);
                     /* strstart never exceeds WSIZE-MAX_MATCH, so there are
                      * always MIN_MATCH bytes ahead.
                      */
                 } while (--s->match_length != 0);
-                ++s->strstart;
+                s->strstart++;
             } else
 #endif
             {
@@ -2049,16 +2049,16 @@ local block_state deflate_slow(s, flush)
             if (bflush) {
                 FLUSH_BLOCK_ONLY(s, 0);
             }
-            ++s->strstart;
-            --s->lookahead;
+            s->strstart++;
+            s->lookahead--;
             if (s->strm->avail_out == 0) return need_more;
         } else {
             /* There is no previous match to compare with, wait for
              * the next step to decide.
              */
             s->match_available = 1;
-            ++s->strstart;
-            --s->lookahead;
+            s->strstart++;
+            s->lookahead--;
         }
     }
     Assert (flush != Z_NO_FLUSH, "no flush?");
