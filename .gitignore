@@ -257,3 +257,5 @@ contrib/vstudio/vc16/*/
 #Generated during zlib release configuration
 contrib/masm*/*.lst
 contrib/masm*/*.obj
+
+*.db
