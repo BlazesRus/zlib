@@ -9,12 +9,14 @@
 #define ZCONF_H
 
 // RTC changes begin
+#if defined(RTC_WINDOWS_FAMILY) || defined(RTC_Unix)
 #define Z_PREFIX 1 // For zlib, we want to have unique symbols to prevent collisions or picking up system zlib
+#endif
 
 #if defined(RTC_WINDOWS_FAMILY)
 #define ZLIB_WINAPI 1
 
-#else // unix
+#elif defined(RTC_Unix) // unix (RTC_Unix define added so regular windows etc not thought to be unix)
 #define HAVE_UNISTD_H 1
 #define HAVE_STDARG_H 1
 #endif // defined(RTC_WINDOWS_FAMILY)
