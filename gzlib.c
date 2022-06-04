@@ -5,7 +5,7 @@
 
 #include "gzguts.h"
 
-#if defined(_WIN32) && !defined(__BORLANDC__)
+#if defined(_WIN32) && (!defined(__BORLANDC__) || defined(__clang__))
 #  define LSEEK _lseeki64
 #else
 #if defined(_LARGEFILE64_SOURCE) && _LFS64_LARGEFILE-0
@@ -72,8 +72,7 @@ char ZLIB_INTERNAL *gz_strwinerror (error)
 #endif /* UNDER_CE */
 
 /* Reset gzip file state */
-local void gz_reset(state)
-    gz_statep state;
+local void gz_reset(gz_statep state)
 {
     state->x.have = 0;              /* no output data available */
     if (state->mode == GZ_READ) {   /* for reading ... */
@@ -90,10 +89,7 @@ local void gz_reset(state)
 }
 
 /* Open a gzip file either by name or file descriptor. */
-local gzFile gz_open(path, fd, mode)
-    const void *path;
-    int fd;
-    const char *mode;
+local gzFile gz_open(const void* path, int fd, const char* mode)
 {
     gz_statep state;
     z_size_t len;
@@ -171,7 +167,7 @@ local gzFile gz_open(path, fd, mode)
             default:        /* could consider as an error, but just ignore */
                 ;
             }
-        mode++;
+        ++mode;
     }
 
     /* must provide an "r", "w", or "a" */
@@ -244,7 +240,7 @@ local gzFile gz_open(path, fd, mode)
 #ifdef WIDECHAR
         fd == -2 ? _wopen(path, oflag, 0666) :
 #endif
-        open((const char *)path, oflag, 0666));
+        _open((const char *)path, oflag, 0666));
     if (state->fd == -1) {
         free(state->path);
         free(state);
@@ -578,10 +574,7 @@ void ZEXPORT gzclearerr(file)
    memory).  Simply save the error message as a static string.  If there is an
    allocation failure constructing the error message, then convert the error to
    out of memory. */
-void ZLIB_INTERNAL gz_error(state, err, msg)
-    gz_statep state;
-    int err;
-    const char *msg;
+void ZLIB_INTERNAL gz_error(gz_statep state, int err, const char* msg)
 {
     /* free previously allocated message and clear */
     if (state->msg != NULL) {
@@ -632,7 +625,7 @@ unsigned ZLIB_INTERNAL gz_intmax()
     do {
         q = p;
         p <<= 1;
-        p++;
+        ++p;
     } while (p > q);
     return q >> 1;
 }

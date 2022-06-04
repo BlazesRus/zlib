@@ -25,12 +25,7 @@ local void fixedtables OF((struct inflate_state FAR *state));
    windowBits is in the range 8..15, and window is a user-supplied
    window and output buffer that is 2**windowBits bytes.
  */
-int ZEXPORT inflateBackInit_(strm, windowBits, window, version, stream_size)
-z_streamp strm;
-int windowBits;
-unsigned char FAR *window;
-const char *version;
-int stream_size;
+int ZEXPORT inflateBackInit_(z_streamp strm, int windowBits, unsigned char FAR* window, const char* version, int stream_size)
 {
     struct inflate_state FAR *state;
 
@@ -79,8 +74,7 @@ int stream_size;
    used for threaded applications, since the rewriting of the tables and virgin
    may not be thread-safe.
  */
-local void fixedtables(state)
-struct inflate_state FAR *state;
+local void fixedtables(struct inflate_state FAR* state)
 {
 #ifdef BUILDFIXED
     static int virgin = 1;
@@ -477,7 +471,7 @@ void FAR *out_desc;
             }
             Tracev((stderr, "inflate:       codes ok\n"));
             state->mode = LEN;
-                /* fallthrough */
+                /* fall through */
 
         case LEN:
             /* use inflate_fast() if we have enough input and output */

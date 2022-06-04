@@ -37,12 +37,12 @@
 extern "C" {
 #endif
 
-#define ZLIB_VERSION "1.2.12.1-motley"
-#define ZLIB_VERNUM 0x12c1
+#define ZLIB_VERSION "1.2.12.f-BlazesRus"
+#define ZLIB_VERNUM 0x12cf
 #define ZLIB_VER_MAJOR 1
 #define ZLIB_VER_MINOR 2
 #define ZLIB_VER_REVISION 12
-#define ZLIB_VER_SUBREVISION 1
+#define ZLIB_VER_SUBREVISION f
 
 /*
     The 'zlib' compression library provides in-memory compression and
@@ -1896,7 +1896,9 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
    ZEXTERN z_off_t ZEXPORT gzoffset OF((gzFile));
    ZEXTERN uLong ZEXPORT adler32_combine OF((uLong, uLong, z_off_t));
    ZEXTERN uLong ZEXPORT crc32_combine OF((uLong, uLong, z_off_t));
+   ZEXTERN uLong ZEXPORT crc32_combine64 OF((uLong, uLong, z_off64_t));
    ZEXTERN uLong ZEXPORT crc32_combine_gen OF((z_off_t));
+   ZEXTERN uLong ZEXPORT crc32_combine_gen64 OF((z_off64_t));
 #endif
 
 #else /* Z_SOLO */
