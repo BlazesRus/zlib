@@ -252,5 +252,7 @@ node_modules/
 
 contrib/vstudio/vc16/*/
 **/.vs/zlib/**
-*.log
-*.user
+**/*.log
+**/*.user
+**/*.obj
+**/*.lst
