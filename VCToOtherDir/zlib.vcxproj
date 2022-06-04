@@ -9,14 +9,6 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-<!--     <ProjectConfiguration Include="ReleaseWithAsm|Win32">
-      <Configuration>ReleaseWithAsm</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="ReleaseWithAsm|x64">
-      <Configuration>ReleaseWithAsm</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration> -->
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -101,18 +93,6 @@
       </PropertyGroup>
     </Otherwise>
   </Choose>
-  <Choose>
-    <When Condition="'$(Configuration)' == 'DebugWithAsm' Or '$(Configuration)' == 'ReleaseWithAsm' Or '$(Configuration)' == 'DebugStaticWithAsm' Or '$(Configuration)' == 'ReleaseStaticWithAsm'">
-      <PropertyGroup>
-        <WithAsm>true</WithAsm>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <WithAsm>false</WithAsm>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
   <PropertyGroup Label="ToolsetOptions">
     <!-- 142 for VS2019(Default);143 for VS2022-->
     <PlatformToolset Condition="'$(Configuration)' == 'ReleaseC99'">ClangCL</PlatformToolset>
@@ -152,8 +132,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(RootDirectory);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-	  <AdditionalIncludeDirectories Condition="'$(Platform)'=='Win32'">$(ContribDir)masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Platform)'=='x64'">$(ContribDir)masmx64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(CStandardType)'=='Modern'">%(PreprocessorDefinitions);UsingModernC;</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(CStandardType)'=='ClangToolset'">%(PreprocessorDefinitions);UsingClangToolset;</PreprocessorDefinitions>
       <PreprocessorDefinitions>WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -179,8 +157,6 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions Condition="'$(Platform)'=='Win32'">/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies Condition="'$(Platform)'=='Win32'">$(ContribDir)masmx86\match686.obj;$(ContribDir)masmx86\inffas32.obj;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies Condition="'$(Platform)'=='x64'">$(ContribDir)masmx64\gvmat64.obj;$(ContribDir)masmx64\inffasx64.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)zlib.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>.\zlib.def</ModuleDefinitionFile>
@@ -216,12 +192,9 @@ bld_ml64.bat</Command>
     <ClCompile>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>$(RootDirectory);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-	  <AdditionalIncludeDirectories Condition="'$(Platform)'=='Win32' And '$(WithAsm)'=='true'">$(ContribDir)masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Platform)'=='x64' And '$(WithAsm)'=='true'">$(ContribDir)masmx64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(CStandardType)'=='Modern'">%(PreprocessorDefinitions);UsingModernC;</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(CStandardType)'=='ClangToolset'">%(PreprocessorDefinitions);UsingClangToolset;</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Platform)'=='Win32'">_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(WithAsm)'=='true'">ASMV;ASMINF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Itanium'">WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>
@@ -245,8 +218,6 @@ bld_ml64.bat</Command>
     </ResourceCompile>
     <Link>
       <AdditionalOptions Condition="'$(Platform)'=='Win32'">/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies Condition="'$(Platform)'=='Win32' And '$(WithAsm)'=='true'">$(ContribDir)masmx86\match686.obj;$(ContribDir)masmx86\inffas32.obj;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies Condition="'$(Platform)'=='x64' And '$(WithAsm)'=='true'">$(ContribDir)masmx64\gvmat64.obj;$(ContribDir)masmx64\inffasx64.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)zlib.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -263,14 +234,6 @@ bld_ml64.bat</Command>
       <TargetMachine Condition="'$(Platform)'=='x64'">MachineX64</TargetMachine>
       <TargetMachine Condition="'$(Platform)'=='Itanium'">MachineIA64</TargetMachine>
     </Link>
-    <PreBuildEvent Condition="'$(Platform)'=='Win32' And '$(WithAsm)'=='true'">
-      <Command>cd $(ContribDir)masmx86
-bld_ml32.bat</Command>
-    </PreBuildEvent>
-    <PreBuildEvent Condition="'$(Platform)'=='x64' And '$(WithAsm)'=='true'">
-      <Command>cd $(ContribDir)masmx64
-bld_ml64.bat</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\adler32.c" />
@@ -282,9 +245,6 @@ bld_ml64.bat</Command>
     <ClCompile Include="..\gzread.c" />
     <ClCompile Include="..\gzwrite.c" />
     <ClCompile Include="..\infback.c" />
-    <ClCompile Include="$(ContribDir)masmx64\inffas8664.c">
-      <ExcludedFromBuild Condition="'$(WithAsm)'=='true' And ('$(Platform)'=='Win32' Or '$(Platform)'=='Itanium')">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\inffast.c" />
     <ClCompile Include="..\inflate.c" />
     <ClCompile Include="..\inftrees.c" />
