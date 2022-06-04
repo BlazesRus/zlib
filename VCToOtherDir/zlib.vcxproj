@@ -9,12 +9,12 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="ReleaseWithoutAsm|Win32">
-      <Configuration>ReleaseWithoutAsm</Configuration>
+    <ProjectConfiguration Include="ReleaseWithAsm|Win32">
+      <Configuration>ReleaseWithAsm</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="ReleaseWithoutAsm|x64">
-      <Configuration>ReleaseWithoutAsm</Configuration>
+    <ProjectConfiguration Include="ReleaseWithAsm|x64">
+      <Configuration>ReleaseWithAsm</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
@@ -74,7 +74,7 @@
     <ZLibPngLibDir Condition="'$(Configuration)' == 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(ZLibPngDir)Clang$(Platform)\'))</ZLibPngLibDir>
   </PropertyGroup>
   <Choose>
-    <When Condition="'$(Configuration)' == 'ReleaseStatic' Or '$(Configuration)' == 'DebugStatic' Or '$(Configuration)'=='DebugStaticWithoutAsm'">
+    <When Condition="'$(Configuration)' == 'ReleaseStatic' Or '$(Configuration)' == 'DebugStatic' Or '$(Configuration)'=='DebugStaticWithAsm'">
       <PropertyGroup>
         <ConfigurationType>StaticLibrary</ConfigurationType>
       </PropertyGroup>
@@ -86,7 +86,7 @@
     </Otherwise>
   </Choose>
   <Choose>
-    <When Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugStatic' Or '$(Configuration)'=='DebugWithoutAsm'">
+    <When Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugStatic' Or '$(Configuration)'=='DebugWithAsm'">
       <PropertyGroup>
         <ConfigurationStyle>Debug</ConfigurationStyle>
 		<LinkIncremental>true</LinkIncremental>
@@ -102,14 +102,14 @@
     </Otherwise>
   </Choose>
   <Choose>
-    <When Condition="'$(Configuration)' == 'DebugWithoutAsm' Or '$(Configuration)' == 'ReleaseWithoutAsm' Or '$(Configuration)' == 'DebugStaticWithoutAsm' Or '$(Configuration)' == 'ReleaseStaticWithoutAsm'">
+    <When Condition="'$(Configuration)' == 'DebugWithAsm' Or '$(Configuration)' == 'ReleaseWithAsm' Or '$(Configuration)' == 'DebugStaticWithAsm' Or '$(Configuration)' == 'ReleaseStaticWithAsm'">
       <PropertyGroup>
-        <WithAsm>false</WithAsm>
+        <WithAsm>true</WithAsm>
       </PropertyGroup>
     </When>
     <Otherwise>
       <PropertyGroup>
-        <WithAsm>true</WithAsm>
+        <WithAsm>false</WithAsm>
       </PropertyGroup>
     </Otherwise>
   </Choose>
@@ -283,7 +283,7 @@ bld_ml64.bat</Command>
     <ClCompile Include="..\gzwrite.c" />
     <ClCompile Include="..\infback.c" />
     <ClCompile Include="$(ContribDir)masmx64\inffas8664.c">
-      <ExcludedFromBuild Condition="'$(Platform)'=='Win32' Or '$(Platform)'=='Itanium'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(WithAsm)'=='true' And ('$(Platform)'=='Win32' Or '$(Platform)'=='Itanium')">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\inffast.c" />
     <ClCompile Include="..\inflate.c" />
