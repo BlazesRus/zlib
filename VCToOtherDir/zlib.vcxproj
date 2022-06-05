@@ -34,14 +34,6 @@
       <Configuration>DebugStatic</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="ReleaseStaticWithoutAsm|Win32">
-      <Configuration>ReleaseStaticWithoutAsm</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="ReleaseStaticWithoutAsm|x64">
-      <Configuration>ReleaseStaticWithoutAsm</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="ReleaseStatic|Win32">
       <Configuration>ReleaseStatic</Configuration>
       <Platform>Win32</Platform>
@@ -135,7 +127,6 @@
       <PreprocessorDefinitions Condition="'$(CStandardType)'=='Modern'">%(PreprocessorDefinitions);UsingModernC;</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(CStandardType)'=='ClangToolset'">%(PreprocessorDefinitions);UsingClangToolset;</PreprocessorDefinitions>
       <PreprocessorDefinitions>WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(WithAsm)'=='true'">ASMV;ASMINF;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Platform)'=='x64' Or '$(Platform)'=='Itanium'">WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>
       </ExceptionHandling>
@@ -171,14 +162,6 @@
       <TargetMachine Condition="'$(Platform)'=='x64'">MachineX64</TargetMachine>
       <TargetMachine Condition="'$(Platform)'=='Itanium'">MachineIA64</TargetMachine>
     </Link>
-    <PreBuildEvent Condition="'$(Platform)'=='Win32'">
-      <Command>cd $(ContribDir)masmx86;
-bld_ml32.bat</Command>
-    </PreBuildEvent>
-    <PreBuildEvent Condition="'$(Platform)'=='x64'">
-      <Command>cd $(ContribDir)masmx64
-bld_ml64.bat</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(ConfigurationStyle)'=='Release'">
     <Midl>
