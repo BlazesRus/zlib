@@ -32,27 +32,32 @@ const char * ZEXPORT zlibVersion()
 uLong ZEXPORT zlibCompileFlags()
 {
     uLong flags;
+    //Warning C6326 fixes
+    const int uIntSize = sizeof(uInt);
+    const int uLongSize = sizeof(uLong);
+    const int voidpfSize = sizeof(voidpf);
+    const int zOffSize = sizeof(z_off_t);
 
     flags = 0;
-    switch ((int)(sizeof(uInt))) {
+    switch (uIntSize) {
     case 2:     break;
     case 4:     flags += 1;     break;
     case 8:     flags += 2;     break;
     default:    flags += 3;
     }
-    switch ((int)(sizeof(uLong))) {
+    switch (uLongSize) {
     case 2:     break;
     case 4:     flags += 1 << 2;        break;
     case 8:     flags += 2 << 2;        break;
     default:    flags += 3 << 2;
     }
-    switch ((int)(sizeof(voidpf))) {
+    switch (voidpfSize) {
     case 2:     break;
     case 4:     flags += 1 << 4;        break;
     case 8:     flags += 2 << 4;        break;
     default:    flags += 3 << 4;
     }
-    switch ((int)(sizeof(z_off_t))) {
+    switch (zOffSize) {
     case 2:     break;
     case 4:     flags += 1 << 6;        break;
     case 8:     flags += 2 << 6;        break;
