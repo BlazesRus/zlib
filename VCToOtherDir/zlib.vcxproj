@@ -55,7 +55,7 @@
   <PropertyGroup>
     <ZLibPngDir>$([System.IO.Path]::GetFullPath('$(ParentOfRoot)TangariaCoop\src\win\'))</ZLibPngDir>
     <ZLibPngLibDir Condition="'$(Configuration)' != 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(ZLibPngDir)$(Platform)\'))</ZLibPngLibDir>
-    <ZLibPngLibDir Condition="'$(Configuration)' == 'ReleaseC99'">$([System.IO.Path]::GetFullPath('$(ZLibPngDir)Clang$(Platform)\'))</ZLibPngLibDir>
+    <ZLibPngLibDir Condition="'$(PlatformToolset)'=='ClangCL'">$([System.IO.Path]::GetFullPath('$(ZLibPngDir)Clang$(Platform)\'))</ZLibPngLibDir>
   </PropertyGroup>
   <Choose>
     <When Condition="'$(Configuration)' == 'ReleaseStatic' Or '$(Configuration)' == 'DebugStatic' Or '$(Configuration)'=='DebugStaticWithAsm'">
@@ -87,9 +87,9 @@
   </Choose>
   <PropertyGroup Label="ToolsetOptions">
     <!-- 142 for VS2019(Default);143 for VS2022-->
-    <PlatformToolset Condition="'$(Configuration)' == 'ReleaseC99'">ClangCL</PlatformToolset>
-    <PlatformToolset Condition="'$(Configuration)' != 'ReleaseC99' And '$(VisualStudioVersion)' != '17'">v142</PlatformToolset>
-    <PlatformToolset Condition="'$(Configuration)' != 'ReleaseC99' And '$(VisualStudioVersion)' == '17'">v143</PlatformToolset>
+    <PlatformToolset Condition="'$(Configuration)' == 'ReleaseC99' Or '$(Configuration)' == 'DebugC99'">ClangCL</PlatformToolset>
+    <PlatformToolset Condition="'$(PlatformToolset)'!='ClangCL' And '$(VisualStudioVersion)' != '17'">v142</PlatformToolset>
+    <PlatformToolset Condition="'$(PlatformToolset)'!='ClangCL' And '$(VisualStudioVersion)' == '17'">v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="GlobalsPart2">
